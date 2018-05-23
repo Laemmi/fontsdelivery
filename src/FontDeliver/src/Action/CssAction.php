@@ -5,13 +5,11 @@ namespace FontDeliver\Action;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface as ServerMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\HtmlResponse;
-//use Zend\Diactoros\Response\JsonResponse;
 use Zend\Expressive\Router;
 use Zend\Expressive\Template;
-//use Zend\Expressive\Plates\PlatesRenderer;
-use Zend\Expressive\Twig\TwigRenderer;
-//use Zend\Expressive\ZendView\ZendViewRenderer;
+
+use FontDeliver\Diactoros\Response\CssResponse;
+
 
 class CssAction implements ServerMiddlewareInterface
 {
@@ -27,6 +25,14 @@ class CssAction implements ServerMiddlewareInterface
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        return new HtmlResponse($this->template->render('css::index', []));
+        $params = $request->getQueryParams();
+
+        $list = \FontDeliver\FontList::factory($params['family']);
+
+//        echo "<pre>";
+//        print_r($list);
+//        echo "</pre>";
+
+        return new CssResponse($this->template->render('css::index', ['list' => $list]));
     }
 }

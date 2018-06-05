@@ -35,7 +35,7 @@ use Zend\Diactoros\Stream;
 use Zend\Diactoros\Response\InjectContentTypeTrait;
 
 
-class CssResponse extends Response
+class FontResponse extends Response
 {
     use InjectContentTypeTrait;
 
@@ -50,41 +50,14 @@ class CssResponse extends Response
      * @param array $headers Array of headers to use at initialization.
      * @throws InvalidArgumentException if $html is neither a string or stream.
      */
-    public function __construct($html, $status = 200, array $headers = [])
+    public function __construct($font, $status = 200, array $headers = [])
     {
         $headers['Access-Control-Allow-Origin'] = '*';
 
         parent::__construct(
-            $this->createBody($html),
+            new Stream($font, 'r'),
             $status,
-            $this->injectContentType('text/css; charset=utf-8', $headers)
+            $this->injectContentType('font/woff2', $headers)
         );
-    }
-
-    /**
-     * Create the message body.
-     *
-     * @param string|StreamInterface $html
-     * @return StreamInterface
-     * @throws InvalidArgumentException if $html is neither a string or stream.
-     */
-    private function createBody($html)
-    {
-        if ($html instanceof StreamInterface) {
-            return $html;
-        }
-
-        if (! is_string($html)) {
-            throw new InvalidArgumentException(sprintf(
-                'Invalid content (%s) provided to %s',
-                (is_object($html) ? get_class($html) : gettype($html)),
-                __CLASS__
-            ));
-        }
-
-        $body = new Stream('php://temp', 'wb+');
-        $body->write($html);
-        $body->rewind();
-        return $body;
     }
 }

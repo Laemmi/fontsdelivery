@@ -9,7 +9,7 @@ use Zend\Expressive\Router;
 use Zend\Expressive\Template;
 
 use FontDeliver\Diactoros\Response\CssResponse;
-
+use FontDeliver\FontList;
 
 class CssAction implements ServerMiddlewareInterface
 {
@@ -25,13 +25,9 @@ class CssAction implements ServerMiddlewareInterface
 
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        $params = $request->getQueryParams();
+        $family = urldecode($request->getAttribute('family'));
 
-        $list = \FontDeliver\FontList::factory($params['family']);
-
-//        echo "<pre>";
-//        print_r($list);
-//        echo "</pre>";
+        $list = FontList::factory($family);
 
         return new CssResponse($this->template->render('css::index', ['list' => $list]));
     }

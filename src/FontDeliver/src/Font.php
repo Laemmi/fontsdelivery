@@ -33,6 +33,8 @@ class Font
 {
     private $name = '';
 
+    private $path = '';
+
     // Light, Regular, SemiBold, Bold, ExtraBold, Black
     private $strength = '';
 
@@ -41,13 +43,19 @@ class Font
 
     private $weight = '';
 
+    private $availablefonttypes = [];
+
+    public function setFontPath(string $value)
+    {
+        $this->path = $value;
+    }
 
     public function setName(string $value)
     {
         $this->name = $value;
     }
 
-    public function setStrenght(string $value)
+    public function setStrength(string $value)
     {
         $this->strength = $value;
     }
@@ -62,12 +70,45 @@ class Font
         $this->weight = $value;
     }
 
+    public function addAvailableFontType(string $value)
+    {
+        $this->availablefonttypes[] = $value;
+    }
+
+    public function getFontPath() : string
+    {
+        $arr = [
+            $this->path,
+            $this->getFontName(),
+            $this->getFontFileName()
+        ];
+
+        return implode(DIRECTORY_SEPARATOR, $arr);
+    }
+
+    public function getFontName() : string
+    {
+        return str_replace(' ', '', $this->getName());
+    }
+
+    public function getFontFileName() : string
+    {
+        $style    = 'Normal' === $this->getStyle() ? '' : $this->getStyle();
+        $strength = 'Regular' === $this->getStrength() && 'Italic' === $style ? '' : $this->getStrength();
+        return $this->getFontName() . '-' . $strength . $style;
+    }
+
+    public function getFontUrl() : string
+    {
+        return '/font/' . $this->getFontFileName();
+    }
+
     public function getName() : string
     {
         return $this->name;
     }
 
-    public function getStrenght() : string
+    public function getStrength() : string
     {
         return $this->strength;
     }
@@ -82,8 +123,6 @@ class Font
         return $this->style;
     }
 
-
-
     public function getCssStyle() : string
     {
         return strtolower($this->style);
@@ -91,13 +130,19 @@ class Font
 
     public function getCssSrc()
     {
-        $t = 'local(\'%1$s %2$s %3$s\'), local(\'%4$s-%2$s%3$s\'), url(XXX.woff2) format(\'woff2\')';
+        $t = [];
+        foreach ($this->availablefonttypes as $val) {
+            $t[] = sprintf('url(\'%1$s.%2$s\') format(\'%2$s\')', $this->getFontUrl(), $val);
+        }
+        return implode(', ', $t);
 
-        return sprintf($t,
-            $this->getName(),
-            $this->getStrenght(),
-            $this->getStyle(),
-            str_replace(' ', '', $this->getName())
-            );
+//        $t = 'local(\'%1$s %2$s %3$s\'), local(\'%4$s-%2$s%3$s\'), url(\'%5$s\') format(\'woff2\')';
+//        return sprintf(implode(', ', $t),
+//            $this->getName(),
+//            $this->getStrength(),
+//            $this->getStyle(),
+//            $this->getFontName(),
+//            $this->getFontUrl()
+//            );
     }
 }

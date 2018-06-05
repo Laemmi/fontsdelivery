@@ -34,6 +34,7 @@ class ConfigProvider
     {
         return [
             'invokables' => [
+                Action\FontAction::class => Action\FontAction::class,
             ],
             'factories'  => [
                 Action\CssAction::class => Action\CssFactory::class,
@@ -51,8 +52,6 @@ class ConfigProvider
         return [
             'paths' => [
                 'css'    => [__DIR__ . '/../templates/css'],
-//                'error'  => [__DIR__ . '/../templates/error'],
-//                'layout' => [__DIR__ . '/../templates/layout'],
             ],
         ];
     }

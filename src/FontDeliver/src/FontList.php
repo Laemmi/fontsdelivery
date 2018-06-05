@@ -29,11 +29,14 @@
 namespace FontDeliver;
 
 use ArrayIterator;
+use FontDeliver\Validator\FontExists;
 
 class FontList extends ArrayIterator
 {
     public static function factory($family) : FontList
     {
+        $datapath = realpath(__DIR__ . '/../../../data/fonts');
+
         $list = new self();
         foreach (explode('|', $family) as $f) {
             if (! preg_match('/^(.+)\:(.+)$/', $f, $matches)) {
@@ -42,8 +45,11 @@ class FontList extends ArrayIterator
 
             $name = $matches[1];
 
-            foreach (explode(',', $matches[2]) as $weight) {
+            if (! (new FontExists($datapath))->isValid($name)) {
+                continue;
+            }
 
+            foreach (explode(',', $matches[2]) as $weight) {
                 $style = 'Normal';
                 if (preg_match('/^([0-9]{3})i$/', $weight, $matches2)) {
                     $style = 'Italic';
@@ -54,34 +60,46 @@ class FontList extends ArrayIterator
 
                 switch (true) {
                     case 900 === $weight:
-                        $strenght = 'Black';
+                        $strength = 'Black';
                         break;
                     case 800 === $weight:
-                        $strenght = 'ExtraBold';
+                        $strength = 'ExtraBold';
                         break;
                     case 700 === $weight:
-                        $strenght = 'Bold';
+                        $strength = 'Bold';
                         break;
                     case 600 === $weight:
-                        $strenght = 'SemiBold';
+                        $strength = 'SemiBold';
                         break;
                     case 300 === $weight:
-                        $strenght = 'Light';
+                        $strength = 'Light';
                         break;
                     case 200 === $weight:
-                        $strenght = 'ExtraLight';
+                        $strength = 'ExtraLight';
                         break;
                     case 400 === $weight:
                     default:
-                        $strenght = 'Regular';
+                        $strength = 'Regular';
                         break;
                 }
 
                 $item = new Font();
+                $item->setFontPath($datapath);
                 $item->setName($name);
-                $item->setStrenght($strenght);
+                $item->setStrength($strength);
                 $item->setStyle($style);
                 $item->setWeight($weight);
+
+                $found = false;
+                foreach (['woff2', 'woff'] as $type) {
+                    if (is_file($item->getFontPath() . '.' . $type)) {
+                        $item->addAvailableFontType($type);
+                        $found = true;
+                    }
+                }
+                if (! $found) {
+                    continue;
+                }
 
                 $list->append($item);
             }

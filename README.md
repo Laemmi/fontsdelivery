@@ -2,11 +2,19 @@
 Fontserver application like Google Fonts 
 
 ## Description
-The Zend Expressive application works like Goggle Fonts. You can get complete css from give url.
+The application works like Goggle Fonts. You can get complete css from give url.
 
-The route is /css  
-/css?family=Open+Sans:400,400i,600,600i
+## Use
+``
+css/=OpenSans:400,400i,600,600i
+``
 
-## Installation
-* clone this repository
+## Convert font
+e.g.
+* https://transfonter.org/
+* https://everythingfonts.com/
+
+## Install font
+data/fonts/OpenSans/OpenSans-Regular.(ttf|woff|woff2)
+
  

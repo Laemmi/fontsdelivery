@@ -2,7 +2,7 @@
 Fontserver application like Google Fonts 
 
 ## Description
-The application works like Goggle Fonts. You can get complete css from give url.
+The application works like Google fonts. You can get complete css from give url.
 
 ## Use
 ``

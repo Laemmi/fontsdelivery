@@ -1,14 +1,14 @@
 {
-    "name": "zendframework/zend-expressive-skeleton",
-    "description": "Zend expressive skeleton. Begin developing PSR-7 middleware applications in seconds!",
+    "name": "laemmi/fontsdelivery",
+    "description": "Font delivery application like google fonts",
     "type": "project",
-    "homepage": "https://github.com/zendframework/zend-expressive-skeleton",
+    "homepage": "https://github.com/Laemmi/fontsdelivery",
     "license": "BSD-3-Clause",
     "config": {
         "sort-packages": true
     },
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.0",
         "http-interop/http-middleware": "^0.4.1",
         "roave/security-advisories": "dev-master",
         "zendframework/zend-component-installer": "^1.0",

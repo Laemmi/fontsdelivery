@@ -51,7 +51,7 @@ class ConfigProvider
     {
         return [
             'paths' => [
-                'css'    => [__DIR__ . '/../templates/css'],
+                'css'    => ['src/FontDeliver/templates/css'],
             ],
         ];
     }

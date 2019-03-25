@@ -11,7 +11,7 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
-    \FontDeliver\ConfigProvider::class,
+    FontDeliver\ConfigProvider::class,
     Zend\Expressive\ConfigProvider::class,
     Zend\Expressive\Router\ConfigProvider::class,
     // Include cache configuration

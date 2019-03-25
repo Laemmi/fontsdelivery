@@ -35,7 +35,7 @@ class FontList extends ArrayIterator
 {
     public static function factory($family) : FontList
     {
-        $datapath = realpath(__DIR__ . '/../../../data/fonts');
+        $datapath = realpath(__DIR__ . '/../../data/fonts');
 
         $list = new self();
         foreach (explode('|', $family) as $f) {

@@ -88,7 +88,7 @@ class Font
 
     public function getFontName() : string
     {
-        return str_replace(' ', '', $this->getName());
+        return $this->getName();
     }
 
     public function getFontFileName() : string
@@ -100,7 +100,7 @@ class Font
 
     public function getFontUrl() : string
     {
-        return '/font/' . $this->getFontFileName();
+        return '/font/' . urlencode($this->getFontFileName());
     }
 
     public function getName() : string

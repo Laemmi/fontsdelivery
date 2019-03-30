@@ -31,50 +31,97 @@ namespace FontDeliver;
 
 class Font
 {
+    /**
+     * @var string
+     */
     private $name = '';
 
+    /**
+     * @var string
+     */
     private $path = '';
 
-    // Light, Regular, SemiBold, Bold, ExtraBold, Black
+    /**
+     * Light, Regular, SemiBold, Bold, ExtraBold, Black
+     * @var string
+     */
     private $strength = '';
 
-    // Normal, Italic
+    /**
+     * Normal, Italic
+     * @var string
+     */
     private $style = '';
 
-    private $weight = '';
+    /**
+     * @var int
+     */
+    private $weight = 0;
 
+    /**
+     * @var array
+     */
     private $availablefonttypes = [];
 
+    /**
+     * @param string $value
+     */
     public function setFontPath(string $value)
     {
         $this->path = $value;
     }
 
+    /**
+     * @param string $value
+     */
     public function setName(string $value)
     {
         $this->name = $value;
     }
 
+    /**
+     * @param string $value
+     */
     public function setStrength(string $value)
     {
         $this->strength = $value;
     }
 
+    /**
+     * @param string $value
+     */
     public function setStyle(string $value)
     {
         $this->style = $value;
     }
 
+    /**
+     * @param int $value
+     */
     public function setWeight(int $value)
     {
         $this->weight = $value;
     }
 
+    /**
+     * @param string $value
+     */
     public function addAvailableFontType(string $value)
     {
         $this->availablefonttypes[] = $value;
     }
 
+    /**
+     * @return string
+     */
+    public function getKey() : string
+    {
+        return $this->name . $this->strength . $this->style;
+    }
+
+    /**
+     * @return string
+     */
     public function getFontPath() : string
     {
         $arr = [
@@ -86,11 +133,17 @@ class Font
         return implode(DIRECTORY_SEPARATOR, $arr);
     }
 
+    /**
+     * @return string
+     */
     public function getFontName() : string
     {
         return str_replace(' ', '', $this->getName());
     }
 
+    /**
+     * @return string
+     */
     public function getFontFileName() : string
     {
         $style    = 'Normal' === $this->getStyle() ? '' : $this->getStyle();
@@ -98,36 +151,57 @@ class Font
         return $this->getFontName() . '-' . $strength . $style;
     }
 
+    /**
+     * @return string#
+     */
     public function getFontUrl() : string
     {
         return '/font/' . $this->getFontFileName();
     }
 
+    /**
+     * @return string
+     */
     public function getName() : string
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getStrength() : string
     {
         return $this->strength;
     }
 
+    /**
+     * @return int
+     */
     public function getWeight() : int
     {
         return $this->weight;
     }
 
+    /**
+     * @return string
+     */
     public function getStyle() : string
     {
         return $this->style;
     }
 
+    /**
+     * @return string
+     */
     public function getCssStyle() : string
     {
         return strtolower($this->style);
     }
 
+    /**
+     * @return string
+     */
     public function getCssSrc()
     {
         $t = [];

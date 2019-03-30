@@ -17,7 +17,7 @@
         "zendframework/zend-expressive-fastroute": "^2.2",
         "zendframework/zend-expressive-helpers": "^4.0",
         "zendframework/zend-expressive-twigrenderer": "^1.4",
-        "zendframework/zend-filter": "^2.8",
+        "zendframework/zend-filter": "^2.9",
         "zendframework/zend-servicemanager": "^3.3",
         "zendframework/zend-stdlib": "^3.1",
         "zendframework/zend-validator": "^2.10"
@@ -54,7 +54,7 @@
         "clear-config-cache": "php bin/clear-config-cache.php",
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "serve": "php -S 0.0.0.0:8080 -t public index.php",
+        "serve": "php -S 0.0.0.0:8080 -t public/",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     }

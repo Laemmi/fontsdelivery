@@ -22,6 +22,12 @@ class ConfigProvider
         return [
             'dependencies' => $this->getDependencies(),
             'templates'    => $this->getTemplates(),
+            'fontdeliver'  => [
+                'fonttypes' => ['woff2', 'woff'],
+                'paths' => [
+                    'fonts' => 'data/fonts'
+                ]
+            ]
         ];
     }
 
@@ -38,6 +44,8 @@ class ConfigProvider
             ],
             'factories'  => [
                 Action\CssAction::class => Action\CssFactory::class,
+                Action\OverviewAction::class => Action\OverviewFactory::class,
+                Services\OverviewList::class => Services\OverviewListFactory::class,
             ],
         ];
     }
@@ -52,6 +60,8 @@ class ConfigProvider
         return [
             'paths' => [
                 'css'    => ['src/FontDeliver/templates/css'],
+                'index'  => ['src/FontDeliver/templates/index'],
+                'layout' => ['src/FontDeliver/templates/layout'],
             ],
         ];
     }

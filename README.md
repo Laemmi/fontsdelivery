@@ -5,11 +5,11 @@ Fontserver application like Google Fonts
 The application works like Google fonts. You can get complete css from give url.
 
 ## Use
-    <link href="<DOMAIN>/css/OpenSans:400,400i,600,600i" rel="stylesheet" />
+    <link href="<DOMAIN>/css/Open+Sans:400,400i,600,600i" rel="stylesheet" />
 
     <style>
     .font-open-sans {
-        font-family: 'OpenSans', sans-serif;
+        font-family: 'Open Sans', sans-serif;
     }
     </style>
 
@@ -19,4 +19,4 @@ e.g.
 * https://everythingfonts.com/
 
 ## Install font
-data/fonts/OpenSans/OpenSans-Regular.(ttf|woff|woff2)
+data/fonts/Open Sans/Open Sans-Regular.(ttf|woff|woff2)

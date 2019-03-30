@@ -42,7 +42,7 @@ class FontExists implements ValidatorInterface
 
     public function isValid($value)
     {
-        $dir = $this->path . '/' . str_replace(' ', '', $value);
+        $dir = $this->path . '/' . $value;
 
         if (is_dir($dir)) {
             return true;

@@ -1,0 +1,26 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Overview{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1>Welcome to <span class="zf-green">Laemmi´s fontsdeliver</span></h1>
+        <p>
+        laemmi
+        </p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+        {% for group in list %}
+            <div>
+                <h2>{{ group.getName() }}</h2>
+                {% for item in group %}
+                <p>{{ item.getName() }} - {{ item.getStrength() }} ({{ item.getWeight() }}) - {{ item.getStyle() }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

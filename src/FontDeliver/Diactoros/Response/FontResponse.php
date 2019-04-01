@@ -53,6 +53,7 @@ class FontResponse extends Response
     public function __construct($font, $status = 200, array $headers = [])
     {
         $headers['Access-Control-Allow-Origin'] = '*';
+        $headers['Cache-Control']               = 'max-age=31536000, public';
 
         parent::__construct(
             new Stream($font, 'r'),

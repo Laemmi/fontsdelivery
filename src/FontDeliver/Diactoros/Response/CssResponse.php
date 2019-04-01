@@ -53,6 +53,7 @@ class CssResponse extends Response
     public function __construct($html, $status = 200, array $headers = [])
     {
         $headers['Access-Control-Allow-Origin'] = '*';
+        $headers['Cache-Control']               = 'max-age=86400, private, stale-while-revalidate=604800';
 
         parent::__construct(
             $this->createBody($html),

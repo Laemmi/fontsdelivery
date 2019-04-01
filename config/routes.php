@@ -31,4 +31,4 @@
 $app->get('/home',                      App\Action\HomePageAction::class, 'home');
 $app->get('/',                                          FontDeliver\Action\OverviewAction::class, 'overview');
 $app->get('/css/{family:[a-zA-Z0-9-\,\:\+\|\%]*|}',     FontDeliver\Action\CssAction::class, 'css');
-$app->get('/font/{font:[a-zA-Z0-9-]*\.[a-z0-9]{3,5}|}', FontDeliver\Action\FontAction::class, 'font');
+$app->get('/font/{font:[a-zA-Z0-9-\+]*\.[a-z0-9]{3,5}|}', FontDeliver\Action\FontAction::class, 'font');

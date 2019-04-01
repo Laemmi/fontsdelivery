@@ -33,7 +33,9 @@ use Psr\Http\Message\StreamInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Stream;
 use Zend\Diactoros\Response\InjectContentTypeTrait;
-
+use DateTime;
+use DateTimeZone;
+use DateInterval;
 
 class CssResponse extends Response
 {
@@ -52,8 +54,21 @@ class CssResponse extends Response
      */
     public function __construct($html, $status = 200, array $headers = [])
     {
+        $format = 'D, d M Y H:i:s \G\M\T';
+        $now = new DateTime();
+
+        $expire = new DateTime();
+        $expire->setTimezone(new DateTimeZone('UTC'));
+        $expire->add(new DateInterval('P1D'));
+
+        $lastmodified = new DateTime();
+        $lastmodified->setTimezone(new DateTimeZone('UTC'));
+        $lastmodified->setTimestamp(getlastmod());
+
         $headers['Access-Control-Allow-Origin'] = '*';
-        $headers['Cache-Control']               = 'max-age=86400, private, stale-while-revalidate=604800';
+        $headers['Cache-Control']               = sprintf('max-age=%d, private', $expire->getTimestamp() - $now->getTimestamp());
+        $headers['Expires']                     = $expire->format($format);
+        $headers['Last-Modified']               = $lastmodified->format($format);
 
         parent::__construct(
             $this->createBody($html),

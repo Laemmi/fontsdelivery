@@ -33,7 +33,9 @@ use Psr\Http\Message\StreamInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Stream;
 use Zend\Diactoros\Response\InjectContentTypeTrait;
-
+use DateTime;
+use DateTimeZone;
+use DateInterval;
 
 class FontResponse extends Response
 {
@@ -52,13 +54,26 @@ class FontResponse extends Response
      */
     public function __construct($font, $status = 200, array $headers = [])
     {
+        $format = 'D, d M Y H:i:s \G\M\T';
+        $now = new DateTime();
+
+        $expire = new DateTime();
+        $expire->setTimezone(new DateTimeZone('UTC'));
+        $expire->add(new DateInterval('P1Y'));
+
+        $lastmodified = new DateTime();
+        $lastmodified->setTimezone(new DateTimeZone('UTC'));
+        $lastmodified->setTimestamp(getlastmod());
+
         $headers['Access-Control-Allow-Origin'] = '*';
-        $headers['Cache-Control']               = 'max-age=31536000, public';
+        $headers['Cache-Control']               = sprintf('max-age=%d, public', $expire->getTimestamp() - $now->getTimestamp());
+        $headers['Expires']                     = $expire->format($format);
+        $headers['Last-Modified']               = $lastmodified->format($format);
 
         parent::__construct(
             new Stream($font, 'r'),
             $status,
-            $this->injectContentType('font/woff2', $headers)
+            $this->injectContentType(sprintf('font/%s', (new \SplFileInfo($font))->getExtension()), $headers)
         );
     }
 }

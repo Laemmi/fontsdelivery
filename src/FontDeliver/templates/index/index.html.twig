@@ -2,6 +2,10 @@
 
 {% block title %}Overview{% endblock %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="css/{{ list.getUrlPart() }}" />
+{% endblock %}
+
 {% block content %}
     <div class="jumbotron">
         <h1>Welcome to <span class="zf-green">Laemmi´s fontsdeliver</span></h1>
@@ -10,17 +14,17 @@
         </p>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-        {% for group in list %}
-            <div>
-                <h2>{{ group.getName() }}</h2>
-                {% for item in group %}
-                <p>{{ item.getName() }} - {{ item.getStrength() }} ({{ item.getWeight() }}) - {{ item.getStyle() }}</p>
-                {% endfor %}
+    <div class="card-columns">
+    {% for group in list %}
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">{{ group.getName() }}</h5>
+            {% for item in group %}
+            <p style="font-family: '{{ item.getFontName() }}'; font-weight: {{ item.getWeight() }}; font-style: {{ item.getCssStyle() }}">{{ item.getName() }} - {{ item.getStrength() }} ({{ item.getWeight() }}) - {{ item.getStyle() }}</p>
+            {% endfor %}
             </div>
-        {% endfor %}
         </div>
+    {% endfor %}
     </div>
 
 {% endblock %}

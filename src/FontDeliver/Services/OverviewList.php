@@ -132,4 +132,17 @@ class OverviewList extends ArrayIterator
             });
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getUrlPart() : string
+    {
+        $arr = [];
+        foreach ($this->getArrayCopy() as $val) {
+            $arr[] = $val->getUrlPart();
+        }
+
+        return implode('|', $arr);
+    }
 }

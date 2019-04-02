@@ -15,7 +15,7 @@ class FontAction implements ServerMiddlewareInterface
     {
         $font = $request->getAttribute('font');
         $font = urldecode($font);
-        $dir  = substr($font, 0, strpos($font, '-'));
+        $dir  = substr($font, 0, strrpos($font, '-'));
 
         $datapath = realpath(__DIR__ . '/../../../data/fonts');
 

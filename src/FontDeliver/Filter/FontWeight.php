@@ -22,54 +22,62 @@
  * @author     Michael Lämmlein <laemmi@spacerabbit.de>
  * @copyright  ©2019 laemmi
  * @license    http://www.opensource.org/licenses/mit-license.php MIT-License
- * @version    1.0.0
+ * @version    1.0.7
  * @since      2019-03-28
  */
 
 namespace FontDeliver\Filter;
 
-use Zend\Filter\Exception;
 use Zend\Filter\FilterInterface;
 
-class StrengthToWeight implements FilterInterface
+class FontWeight implements FilterInterface
 {
+    const TYPE_WEIGHT   = 'weight';
+    const TYPE_STRENGTH = 'strength';
+
+    private $type = self::TYPE_WEIGHT;
+
+    private $default = [
+        400 => 'Regular'
+    ];
+
+    private $data = [];
+
+    /**
+     * FontStyle constructor.
+     *
+     * @param array $fontweights
+     * @param string $type
+     */
+    public function __construct(array $fontweights, string $type = '')
+    {
+        $this->data = $fontweights;
+
+        if ($type) {
+            $this->type = $type;
+        }
+    }
+
     /**
      * Returns the result of filtering $value
      *
      * @param  mixed $value
-     * @throws Exception\RuntimeException If filtering $value is impossible
      *
-     * @return int
+     * @return mixed
      */
     public function filter($value)
     {
-        $strength = (string) $value;
-
-        switch (true) {
-            case 'Black' === $strength:
-                $weight = 900;
-                break;
-            case 'ExtraBold' === $strength:
-                $weight = 800;
-                break;
-            case 'Bold' === $strength:
-                $weight = 700;
-                break;
-            case 'SemiBold' === $strength:
-                $weight = 600;
-                break;
-            case 'Light' === $strength:
-                $weight = 300;
-                break;
-            case 'ExtraLight' === $strength:
-                $weight = 200;
-                break;
-            case 'Regular' === $strength:
-            default:
-                $weight = 400;
-                break;
+        $default = $this->default;
+        $data    = $this->data;
+        if ($this->type === self::TYPE_WEIGHT) {
+            $default = array_flip($default);
+            $data    = array_flip($data);
         }
 
-        return $weight;
+        if (! isset($data[$value])) {
+            $value = key($default);
+        }
+
+        return $data[$value];
     }
 }

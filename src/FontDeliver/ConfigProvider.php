@@ -24,6 +24,16 @@ class ConfigProvider
             'templates'    => $this->getTemplates(),
             'fontdeliver'  => [
                 'fonttypes' => ['woff2', 'woff'],
+                'fontweights' => [
+                    100 => 'Thin',
+                    200 => 'ExtraLight',
+                    300 => 'Light',
+                    400 => 'Regular',
+                    600 => 'SemiBold',
+                    700 => 'Bold',
+                    800 => 'ExtraBold',
+                    900 => 'Black',
+                ],
                 'paths' => [
                     'fonts' => 'data/fonts'
                 ]
@@ -43,8 +53,9 @@ class ConfigProvider
                 Action\FontAction::class => Action\FontAction::class,
             ],
             'factories'  => [
-                Action\CssAction::class => Action\CssFactory::class,
+                Action\CssAction::class      => Action\CssFactory::class,
                 Action\OverviewAction::class => Action\OverviewFactory::class,
+                Services\FontList::class     => Services\FontListFactory::class,
                 Services\OverviewList::class => Services\OverviewListFactory::class,
             ],
         ];

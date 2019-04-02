@@ -31,6 +31,7 @@ namespace FontDeliver\Services;
 use ArrayIterator;
 use FontDeliver\Font;
 use FontDeliver\Validator\FontExists;
+use FontDeliver\Validator;
 use FontDeliver\Filter;
 
 class FontList extends ArrayIterator
@@ -46,7 +47,8 @@ class FontList extends ArrayIterator
     {
         $datapath = $this->environment['paths']['fonts'];
 
-        $filterFontWeight = new Filter\FontWeight($this->environment['fontweights'], Filter\FontWeight::TYPE_STRENGTH);
+        $validatorFontWeight = new Validator\FontWeight($this->environment['fontweights'], Filter\FontWeight::TYPE_STRENGTH);
+        $filterFontWeight    = new Filter\FontWeight($this->environment['fontweights'], Filter\FontWeight::TYPE_STRENGTH);
 
         foreach (explode('|', $family) as $f) {
             if (! preg_match('/^(.+)\:(.+)$/', $f, $matches)) {
@@ -64,6 +66,10 @@ class FontList extends ArrayIterator
                 if (preg_match('/^([0-9]{3})i$/', $weight, $matches2)) {
                     $style = 'Italic';
                     $weight = $matches2[1];
+                }
+
+                if (! $validatorFontWeight->isValid($weight)) {
+                    continue;
                 }
 
                 $item = new Font();

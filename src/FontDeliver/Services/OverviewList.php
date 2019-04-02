@@ -34,6 +34,7 @@ use FontDeliver\FontGroup;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use FilesystemIterator;
+use FontDeliver\Validator;
 use FontDeliver\FilterIterator;
 use FontDeliver\Filter;
 
@@ -56,6 +57,9 @@ class OverviewList extends ArrayIterator
 
         $fontGroup = new FontGroup();
 
+        $validatorFontWeight = new Validator\FontWeight($environment['fontweights'], Filter\FontWeight::TYPE_WEIGHT);
+        $filterFontWeight = new Filter\FontWeight($environment['fontweights'], Filter\FontWeight::TYPE_WEIGHT);
+
         /**
          * @var $it \SplFileInfo
          */
@@ -74,9 +78,13 @@ class OverviewList extends ArrayIterator
                 $fonttype = $matches[3];
 
                 $style = 'Normal';
-                if (preg_match('/(.+)(Italic)$/', $strength, $matches2)) {
+                if (preg_match('/(.*)(Italic)$/', $strength, $matches2)) {
                     $style = 'Italic';
-                    $strength = $matches2[1];
+                    $strength = $matches2[1] ? $matches2[1] : 'Regular';
+                }
+
+                if (! $validatorFontWeight->isValid($strength)) {
+                    continue;
                 }
 
                 $key = $name . $strength . $style;
@@ -92,7 +100,7 @@ class OverviewList extends ArrayIterator
                 $file->setName($name);
                 $file->setStrength($strength);
                 $file->setStyle($style);
-                $file->setWeight((new Filter\StrengthToWeight())->filter($strength));
+                $file->setWeight($filterFontWeight->filter($strength));
                 $file->addAvailableFontType($fonttype);
 
                 $fontGroup->append($file);

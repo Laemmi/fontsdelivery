@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,56 +21,50 @@
  *
  * @category   fontsdelivery
  * @author     Michael Lämmlein <laemmi@spacerabbit.de>
- * @copyright  ©2019 laemmi
+ * @copyright  ©2018 laemmi
  * @license    http://www.opensource.org/licenses/mit-license.php MIT-License
  * @version    1.0.0
- * @since      2019-03-28
+ * @since      23.05.18
  */
 
-namespace FontDeliver\Filter;
+namespace FontDeliver\Validator;
 
-use Zend\Filter\Exception;
-use Zend\Filter\FilterInterface;
+use Zend\Validator\ValidatorInterface;
 
-class StrengthToWeight implements FilterInterface
+class FontWeight implements ValidatorInterface
 {
-    /**
-     * Returns the result of filtering $value
-     *
-     * @param  mixed $value
-     * @throws Exception\RuntimeException If filtering $value is impossible
-     *
-     * @return int
-     */
-    public function filter($value)
-    {
-        $strength = (string) $value;
+    const TYPE_WEIGHT   = 'weight';
+    const TYPE_STRENGTH = 'strength';
 
-        switch (true) {
-            case 'Black' === $strength:
-                $weight = 900;
-                break;
-            case 'ExtraBold' === $strength:
-                $weight = 800;
-                break;
-            case 'Bold' === $strength:
-                $weight = 700;
-                break;
-            case 'SemiBold' === $strength:
-                $weight = 600;
-                break;
-            case 'Light' === $strength:
-                $weight = 300;
-                break;
-            case 'ExtraLight' === $strength:
-                $weight = 200;
-                break;
-            case 'Regular' === $strength:
-            default:
-                $weight = 400;
-                break;
+    private $type = self::TYPE_WEIGHT;
+
+    private $data = [];
+
+    public function __construct(array $fontweights, string $type = '')
+    {
+        $this->data = $fontweights;
+
+        if ($type) {
+            $this->type = $type;
+        }
+    }
+
+    public function isValid($value)
+    {
+        $data = $this->data;
+        if ($this->type === self::TYPE_WEIGHT) {
+            $data = array_flip($data);
         }
 
-        return $weight;
+        if (isset($data[$value])) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getMessages()
+    {
+
     }
 }

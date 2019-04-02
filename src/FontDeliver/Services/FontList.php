@@ -26,18 +26,30 @@
  * @since      21.05.18
  */
 
-namespace FontDeliver;
+namespace FontDeliver\Services;
 
 use ArrayIterator;
+use FontDeliver\Font;
 use FontDeliver\Validator\FontExists;
+use FontDeliver\Validator;
+use FontDeliver\Filter;
 
 class FontList extends ArrayIterator
 {
-    public static function factory($family) : FontList
-    {
-        $datapath = realpath(__DIR__ . '/../../data/fonts');
+    private $environment;
 
-        $list = new self();
+    public function __construct(array $environment)
+    {
+        $this->environment = $environment;
+    }
+
+    public function __invoke(string $family)
+    {
+        $datapath = $this->environment['paths']['fonts'];
+
+        $validatorFontWeight = new Validator\FontWeight($this->environment['fontweights'], Filter\FontWeight::TYPE_STRENGTH);
+        $filterFontWeight    = new Filter\FontWeight($this->environment['fontweights'], Filter\FontWeight::TYPE_STRENGTH);
+
         foreach (explode('|', $family) as $f) {
             if (! preg_match('/^(.+)\:(.+)$/', $f, $matches)) {
                 continue;
@@ -56,39 +68,16 @@ class FontList extends ArrayIterator
                     $weight = $matches2[1];
                 }
 
-                $weight = (int) $weight;
-
-                switch (true) {
-                    case 900 === $weight:
-                        $strength = 'Black';
-                        break;
-                    case 800 === $weight:
-                        $strength = 'ExtraBold';
-                        break;
-                    case 700 === $weight:
-                        $strength = 'Bold';
-                        break;
-                    case 600 === $weight:
-                        $strength = 'SemiBold';
-                        break;
-                    case 300 === $weight:
-                        $strength = 'Light';
-                        break;
-                    case 200 === $weight:
-                        $strength = 'ExtraLight';
-                        break;
-                    case 400 === $weight:
-                    default:
-                        $strength = 'Regular';
-                        break;
+                if (! $validatorFontWeight->isValid($weight)) {
+                    continue;
                 }
 
                 $item = new Font();
                 $item->setFontPath($datapath);
                 $item->setName($name);
-                $item->setStrength($strength);
+                $item->setStrength($filterFontWeight->filter($weight));
                 $item->setStyle($style);
-                $item->setWeight($weight);
+                $item->setWeight((int) $weight);
 
                 $found = false;
                 foreach (['woff2', 'woff'] as $type) {
@@ -101,10 +90,10 @@ class FontList extends ArrayIterator
                     continue;
                 }
 
-                $list->append($item);
+                $this->append($item);
             }
         }
 
-        return $list;
+        return $this;
     }
 }

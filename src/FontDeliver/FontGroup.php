@@ -64,4 +64,17 @@ class FontGroup extends ArrayIterator
 
         $this->offsetSet($value->getKey(), $value);
     }
+
+    /**
+     * @return string
+     */
+    public function getUrlPart() : string
+    {
+        $arr = [];
+        foreach ($this->getArrayCopy() as $val) {
+            $arr[$val->getUrlPart()] = $val->getUrlPart();
+        }
+
+        return urlencode($this->getName()) . ':' . implode(',', $arr);
+    }
 }

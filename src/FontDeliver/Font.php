@@ -219,4 +219,12 @@ class Font
 //            $this->getFontUrl()
 //            );
     }
+
+    /**
+     * @return string
+     */
+    public function getUrlPart() : string
+    {
+        return (string) $this->getWeight();
+    }
 }

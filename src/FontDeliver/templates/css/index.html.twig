@@ -4,5 +4,6 @@
     font-style    : {{ item.getCssStyle()|raw }};
     font-weight   : {{ item.getWeight()|raw }};
     src           : {{ item.getCssSrc()|raw }};
+    font-display  : swap;
 }
 {% endfor %}

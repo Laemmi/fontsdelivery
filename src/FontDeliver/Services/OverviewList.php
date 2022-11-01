@@ -57,8 +57,8 @@ class OverviewList extends ArrayIterator
 
         $fontGroup = new FontGroup();
 
-        $validatorFontWeight = new Validator\FontWeight($environment['fontweights'], Filter\FontWeight::TYPE_WEIGHT);
-        $filterFontWeight = new Filter\FontWeight($environment['fontweights'], Filter\FontWeight::TYPE_WEIGHT);
+        $fontValidator = new Validator\FontWeight($environment['fontweights']);
+        $fontFilter = new Filter\FontWeight($environment['fontweights']);
 
         /**
          * @var $it \SplFileInfo
@@ -83,7 +83,7 @@ class OverviewList extends ArrayIterator
                     $strength = $matches2[1] ? $matches2[1] : 'Regular';
                 }
 
-                if (! $validatorFontWeight->isValid($strength)) {
+                if (! $fontValidator->isValid($strength)) {
                     continue;
                 }
 
@@ -100,7 +100,7 @@ class OverviewList extends ArrayIterator
                 $file->setName($name);
                 $file->setStrength($strength);
                 $file->setStyle($style);
-                $file->setWeight($filterFontWeight->filter($strength));
+                $file->setWeight($fontFilter->filter($strength));
                 $file->addAvailableFontType($fonttype);
 
                 $fontGroup->append($file);

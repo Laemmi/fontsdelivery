@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -30,12 +31,12 @@ namespace FontDeliver\Filter;
 
 use Zend\Filter\FilterInterface;
 
-class FontWeight implements FilterInterface
+class FontStrength implements FilterInterface
 {
     /**
-     * @var int
+     * @var string
      */
-    private int $default = 400;
+    private string $default = 'Regular';
 
     /**
      * @var array
@@ -59,10 +60,11 @@ class FontWeight implements FilterInterface
      */
     public function filter($value)
     {
-        if (isset($this->fontWeights[$value])) {
-            return $this->fontWeights[$value];
+        $value = array_keys($this->fontWeights, $value);
+        if ($value) {
+            return $value;
         }
 
-        return $this->default;
+        return [$this->default];
     }
 }

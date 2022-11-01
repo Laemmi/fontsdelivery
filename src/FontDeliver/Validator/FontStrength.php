@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,23 +21,18 @@
  *
  * @category   fontsdelivery
  * @author     Michael Lämmlein <laemmi@spacerabbit.de>
- * @copyright  ©2019 laemmi
+ * @copyright  ©2018 laemmi
  * @license    http://www.opensource.org/licenses/mit-license.php MIT-License
- * @version    1.0.7
- * @since      2019-03-28
+ * @version    1.0.0
+ * @since      23.05.18
  */
 
-namespace FontDeliver\Filter;
+namespace FontDeliver\Validator;
 
-use Zend\Filter\FilterInterface;
+use Zend\Validator\ValidatorInterface;
 
-class FontWeight implements FilterInterface
+class FontStrength implements ValidatorInterface
 {
-    /**
-     * @var int
-     */
-    private int $default = 400;
-
     /**
      * @var array
      */
@@ -51,18 +47,21 @@ class FontWeight implements FilterInterface
     }
 
     /**
-     * Returns the result of filtering $value
-     *
-     * @param  mixed $value
-     *
-     * @return mixed
+     * @param $value
+     * @return bool
      */
-    public function filter($value)
+    public function isValid($value)
     {
-        if (isset($this->fontWeights[$value])) {
-            return $this->fontWeights[$value];
+        $value = array_search($value, $this->fontWeights);
+        if ($value) {
+            return true;
         }
 
-        return $this->default;
+        return false;
+    }
+
+    public function getMessages()
+    {
+        // TODO: Implement getMessages() method.
     }
 }

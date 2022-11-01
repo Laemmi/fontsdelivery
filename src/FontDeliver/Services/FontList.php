@@ -36,19 +36,29 @@ use FontDeliver\Filter;
 
 class FontList extends ArrayIterator
 {
-    private $environment;
+    /**
+     * @var array
+     */
+    private array $environment;
 
+    /**
+     * @param array $environment
+     */
     public function __construct(array $environment)
     {
         $this->environment = $environment;
     }
 
-    public function __invoke(string $family)
+    /**
+     * @param string $family
+     * @return $this
+     */
+    public function __invoke(string $family): self
     {
         $datapath = $this->environment['paths']['fonts'];
 
-        $validatorFontWeight = new Validator\FontWeight($this->environment['fontweights'], Filter\FontWeight::TYPE_STRENGTH);
-        $filterFontWeight    = new Filter\FontWeight($this->environment['fontweights'], Filter\FontWeight::TYPE_STRENGTH);
+        $fontValidator = new Validator\FontStrength($this->environment['fontweights']);
+        $fontFilter    = new Filter\FontStrength($this->environment['fontweights']);
 
         foreach (explode('|', $family) as $f) {
             if (! preg_match('/^(.+)\:(.+)$/', $f, $matches)) {
@@ -68,29 +78,30 @@ class FontList extends ArrayIterator
                     $weight = $matches2[1];
                 }
 
-                if (! $validatorFontWeight->isValid($weight)) {
+                if (! $fontValidator->isValid($weight)) {
                     continue;
                 }
 
                 $item = new Font();
                 $item->setFontPath($datapath);
                 $item->setName($name);
-                $item->setStrength($filterFontWeight->filter($weight));
                 $item->setStyle($style);
                 $item->setWeight((int) $weight);
 
-                $found = false;
-                foreach (['woff2', 'woff'] as $type) {
-                    if (is_file($item->getFontPath() . '.' . $type)) {
-                        $item->addAvailableFontType($type);
-                        $found = true;
+                // Check has font files
+                foreach ($fontFilter->filter($weight) as $strength) {
+                    $item->setStrength($strength);
+                    $found_type = false;
+                    foreach (['woff2', 'woff'] as $type) {
+                        if (is_file($item->getFontPath() . '.' . $type)) {
+                            $item->addAvailableFontType($type);
+                            $found_type = true;
+                        }
+                    }
+                    if ($found_type) {
+                        $this->append($item);
                     }
                 }
-                if (! $found) {
-                    continue;
-                }
-
-                $this->append($item);
             }
         }
 

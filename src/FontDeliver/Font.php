@@ -34,34 +34,34 @@ class Font
     /**
      * @var string
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @var string
      */
-    private $path = '';
+    private string $path = '';
 
     /**
      * Light, Regular, SemiBold, Bold, ExtraBold, Black
      * @var string
      */
-    private $strength = '';
+    private string $strength = '';
 
     /**
      * Normal, Italic
      * @var string
      */
-    private $style = '';
+    private string $style = '';
 
     /**
      * @var int
      */
-    private $weight = 0;
+    private int $weight = 0;
 
     /**
      * @var array
      */
-    private $availablefonttypes = [];
+    private array $availablefonttypes = [];
 
     /**
      * @param string $value
@@ -114,7 +114,7 @@ class Font
     /**
      * @return string
      */
-    public function getKey() : string
+    public function getKey(): string
     {
         return $this->name . $this->strength . $this->style;
     }
@@ -122,7 +122,7 @@ class Font
     /**
      * @return string
      */
-    public function getFontPath() : string
+    public function getFontPath(): string
     {
         $arr = [
             $this->path,
@@ -136,7 +136,7 @@ class Font
     /**
      * @return string
      */
-    public function getFontName() : string
+    public function getFontName(): string
     {
         return $this->getName();
     }
@@ -144,7 +144,7 @@ class Font
     /**
      * @return string
      */
-    public function getFontFileName() : string
+    public function getFontFileName(): string
     {
         $style    = 'Normal' === $this->getStyle() ? '' : $this->getStyle();
         $strength = 'Regular' === $this->getStrength() && 'Italic' === $style ? '' : $this->getStrength();
@@ -154,7 +154,7 @@ class Font
     /**
      * @return string#
      */
-    public function getFontUrl() : string
+    public function getFontUrl(): string
     {
         return '/font/' . urlencode($this->getFontFileName());
     }
@@ -162,7 +162,7 @@ class Font
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -170,7 +170,7 @@ class Font
     /**
      * @return string
      */
-    public function getStrength() : string
+    public function getStrength(): string
     {
         return $this->strength;
     }
@@ -178,7 +178,7 @@ class Font
     /**
      * @return int
      */
-    public function getWeight() : int
+    public function getWeight(): int
     {
         return $this->weight;
     }
@@ -186,7 +186,7 @@ class Font
     /**
      * @return string
      */
-    public function getStyle() : string
+    public function getStyle(): string
     {
         return $this->style;
     }
@@ -194,7 +194,7 @@ class Font
     /**
      * @return string
      */
-    public function getCssStyle() : string
+    public function getCssStyle(): string
     {
         return strtolower($this->style);
     }
@@ -202,7 +202,7 @@ class Font
     /**
      * @return string
      */
-    public function getCssSrc()
+    public function getCssSrc(): string
     {
         $t = [];
         foreach ($this->availablefonttypes as $val) {
@@ -223,7 +223,7 @@ class Font
     /**
      * @return string
      */
-    public function getUrlPart() : string
+    public function getUrlPart(): string
     {
         return (string) $this->getWeight();
     }

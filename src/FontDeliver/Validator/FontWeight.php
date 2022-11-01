@@ -33,30 +33,26 @@ use Zend\Validator\ValidatorInterface;
 
 class FontWeight implements ValidatorInterface
 {
-    const TYPE_WEIGHT   = 'weight';
-    const TYPE_STRENGTH = 'strength';
+    /**
+     * @var array
+     */
+    private array $fontWeights;
 
-    private $type = self::TYPE_WEIGHT;
-
-    private $data = [];
-
-    public function __construct(array $fontweights, string $type = '')
+    /**
+     * @param array $fontWeights
+     */
+    public function __construct(array $fontWeights)
     {
-        $this->data = $fontweights;
-
-        if ($type) {
-            $this->type = $type;
-        }
+        $this->fontWeights = $fontWeights;
     }
 
+    /**
+     * @param $value
+     * @return bool
+     */
     public function isValid($value)
     {
-        $data = $this->data;
-        if ($this->type === self::TYPE_WEIGHT) {
-            $data = array_flip($data);
-        }
-
-        if (isset($data[$value])) {
+        if (isset($this->fontWeights[$value])) {
             return true;
         }
 
@@ -65,6 +61,6 @@ class FontWeight implements ValidatorInterface
 
     public function getMessages()
     {
-
+        // TODO: Implement getMessages() method.
     }
 }

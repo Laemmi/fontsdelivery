@@ -100,6 +100,7 @@ class FontList extends ArrayIterator
                     }
                     if ($found_type) {
                         $this->append($item);
+                        continue 2;
                     }
                 }
             }
